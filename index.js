@@ -15,8 +15,7 @@ app.use(cors());
 // });
 
 mongoose.connect(
-  // "mongodb+srv://cacguff:BirchyBoy2020@mymoviesdb.wfjolfq.mongodb.net/moviesdb?retryWrites=true&w=majority&appName=mymoviesdb",
-  process.env.CONNECTION_URI,
+   process.env.CONNECTION_URI,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 

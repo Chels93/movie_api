@@ -119,4 +119,32 @@ module.exports = (app) => {
         });
     }
   );
+
+  /**
+   * Returns data about a single movie by its ID (_id)
+   *
+   * @route GET /movies/:id
+   * @group Movies - Operations about movies
+   * @security jwt
+   * @param {string} id.path.required - ID of the movie (MongoDB _id)
+   * @returns {Object} 200 - Movie object
+   * @returns {Error} 500 - Internal server error
+   */
+  app.get(
+    "/movies/:id", // Use movie ID as a parameter
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+      await Movies.findById(req.params.id) // Find the movie by its MongoDB _id
+        .then((movie) => {
+          if (!movie) {
+            return res.status(404).send("Movie not found.");
+          }
+          res.json(movie); // Return the movie data
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send("Error: " + err); // Handle errors
+        });
+    }
+  );
 };

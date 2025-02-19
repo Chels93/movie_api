@@ -28,18 +28,22 @@ module.exports = (app) => {
     "/movies",
     passport.authenticate("jwt", { session: false }),
     async (req, res) => {
-        await Movies.find()
+      await Movies.find()
         .then((movies) => {
           const cleanedMovies = movies.map((movie) => {
-            if (movie.director && movie.director.deathYear === null) {
+            if (
+              movie.director &&
+              (movie.director.deathYear === null ||
+                movie.director.deathYear === undefined)
+            ) {
               delete movie.director.deathYear;
             }
             return movie;
           });
-      
+
           res.status(201).json(cleanedMovies);
         })
-      
+
         .catch((err) => {
           console.error(err);
           res.status(500).send("Error: " + err);

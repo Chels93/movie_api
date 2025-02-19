@@ -31,8 +31,8 @@ module.exports = (app) => {
         await Movies.find()
         .then((movies) => {
           const cleanedMovies = movies.map((movie) => {
-            if (movie.Director && movie.Director.deathYear === null) {
-              delete movie.Director.deathYear;
+            if (movie.director && movie.director.deathYear === null) {
+              delete movie.director.deathYear;
             }
             return movie;
           });

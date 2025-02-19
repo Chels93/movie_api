@@ -24,31 +24,27 @@ module.exports = (app) => {
    * @returns {Array<Object>} 200 - Array of movies
    * @returns {Error} 500 - Internal server error
    */
-  app.get(
-    "/movies",
-    passport.authenticate("jwt", { session: false }),
-    async (req, res) => {
-      await Movies.find()
-        .then((movies) => {
-          const cleanedMovies = movies.map((movie) => {
-            if (
-              movie.director &&
-              (movie.director.deathYear === null ||
-                movie.director.deathYear === undefined)
-            ) {
-              delete movie.director.deathYear; // Remove the field entirely if it's null or undefined
-            }
-            return movie;
-          });
-
-          res.status(201).json(cleanedMovies);
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).send("Error: " + err);
+  app.get("/movies", passport.authenticate("jwt", { session: false }), async (req, res) => {
+    await Movies.find()
+      .then((movies) => {
+        const cleanedMovies = movies.map((movie) => {
+          if (
+            movie.director &&
+            (movie.director.deathYear === null || movie.director.deathYear === undefined)
+          ) {
+            delete movie.director.deathYear; // Remove the field entirely if it's null or undefined
+          }
+          return movie;
         });
-    }
-  );
+  
+        res.status(201).json(cleanedMovies);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  });
+  
 
   /**
    * Returns data about a single movie by title

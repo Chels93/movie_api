@@ -31,19 +31,13 @@ module.exports = (app) => {
       await Movies.find()
         .then((movies) => {
           const cleanedMovies = movies.map((movie) => {
-            if (
-              movie.director &&
-              (movie.director.deathYear === null ||
-                movie.director.deathYear === undefined)
-            ) {
-              delete movie.director.deathYear;
+            if (movie.director && movie.director.deathYear === null) {
+              delete movie.director.deathYear; // Remove the property if it's null
             }
             return movie;
           });
-
           res.status(201).json(cleanedMovies);
         })
-
         .catch((err) => {
           console.error(err);
           res.status(500).send("Error: " + err);

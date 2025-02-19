@@ -9,6 +9,20 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 /**
+ * Schema representing a director.
+ * @constant
+ * @schema directorSchema
+ */
+let directorSchema = mongoose.Schema({
+    Name: { type: String, required: true },
+    Bio: String,
+    Birthdate: Date,
+    DeathYear: { type: Number }, 
+    Movies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
+  });
+  
+
+/**
  * Schema representing a movie.
  * @constant
  * @schema movieSchema

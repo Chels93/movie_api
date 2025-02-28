@@ -17,7 +17,7 @@ let directorSchema = mongoose.Schema({
     Name: { type: String, required: true },
     Bio: String,
     Birthdate: Date,
-    DeathYear: { type: Number }, 
+    DeathYear: { type: Number, required: false }, 
     Movies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
   });
   
@@ -34,10 +34,7 @@ let movieSchema = mongoose.Schema({
     Name: String,
     Description: String,
   },
-  Director: {
-    Name: String,
-    Bio: String,
-  },
+  Director: { type: directorSchema },
   Actors: [String],
   imagePath: String,
   Featured: Boolean,

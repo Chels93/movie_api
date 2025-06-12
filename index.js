@@ -5,6 +5,9 @@
 /**
  * Import necessary modules for server setup.
  */
+
+require('dotenv').config(); //Loads .env variables
+
 const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");

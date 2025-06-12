@@ -95,10 +95,11 @@ app.use(requestTime);
  * @async
  * @param {string} process.env.CONNECTION_URI - The MongoDB connection URI.
  */
-mongoose.connect(process.env.CONNECTION_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+console.log("DEBUG: CONNECTION_URI is", process.env.CONNECTION_URI);
+mongoose.connect(process.env.CONNECTION_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
 
 /**
  * Setup authentication routes.

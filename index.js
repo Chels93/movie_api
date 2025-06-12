@@ -1,3 +1,5 @@
+require('dotenv').config(); //Loads .env variables
+
 /**
  * @file Overview of the server setup for a Movie API.
  */
@@ -5,8 +7,6 @@
 /**
  * Import necessary modules for server setup.
  */
-
-require('dotenv').config(); //Loads .env variables
 
 const cors = require("cors");
 const express = require("express");

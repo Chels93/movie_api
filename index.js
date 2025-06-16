@@ -33,6 +33,7 @@ const allowedOrigins = [
   "https://chels93.github.io",
   "http://localhost:3000",
   "http://localhost:4200",
+  "http://54.221.41.75"
 ];
 
 /**

@@ -14,6 +14,7 @@ console.log("AWS_REGION:", process.env.AWS_REGION);
 
 const cors = require("cors");
 const express = require("express");
+const multer = require('multer');
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");

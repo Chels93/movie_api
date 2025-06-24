@@ -37,17 +37,16 @@ const { S3Client, ListObjectsV2Command, PutObjectCommand } = require('@aws-sdk/c
 app.use(fileUpload());
 
 /**
- * S3 Client configuration for LocalStack.
+ * S3 Client configuration for AWS.
  * 
- * region: The AWS region to connect to (LocalStack defaults to 'us-east-1').
- * endpoint: LocalStack URL to access the mock AWS services.
- * forcePathStyle: Required to correctly format S3 URLs for LocalStack.
+ * region: The AWS region to connect to.
+ * Uses environment variable AWS_REGION or defaults to 'us-east-1'.
  */
 const s3Client = new S3Client({
-  region: 'us-east-1',
-  endpoint: 'http://localhost:4566',
-  forcePathStyle: true,
+  region: process.env.AWS_REGION || 'us-east-1', // Use env var for flexibility
 });
+
+
 
 /**
  * Define the allowed origins for CORS.
@@ -127,7 +126,6 @@ mongoose.connect(process.env.CONNECTION_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-
 /**
  * Setup authentication routes.
  */
@@ -157,7 +155,6 @@ app.get("/docs", (req, res) => {
 
 app.use(express.static(path.join(__dirname, "public")));
 
-
 /**
  * Default route responding with a welcome message.
  * @function
@@ -171,11 +168,10 @@ app.get("/", (req, res) => {
 
 /**
  * Name of the S3 bucket used for storing images.
- * Replace this with your actual bucket name used in LocalStack.
+ * Loaded from environment variable BUCKET_NAME.
  * @const {string}
  */
-const BUCKET_NAME = 'exercise-2.4-cf-specialization-bucket';
-
+const BUCKET_NAME = process.env.BUCKET_NAME;
 
 /**
  * Temporary path to store files before uploading them to S3.
@@ -300,7 +296,6 @@ app.get('/images/:key', async (req, res, next) => {
     next(error);
   }
 });
-
 
 /**
  * Error handling middleware.

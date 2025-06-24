@@ -257,6 +257,52 @@ app.post('/images', async (req, res, next) => {
 });
 
 /**
+ * Import necessary modules for retrieving S3 objects.
+ */
+const { GetObjectCommand } = require('@aws-sdk/client-s3');
+const stream = require('stream');
+const { promisify } = require('util');
+
+/**
+ * Utility to pipe streams using promises.
+ */
+const pipeline = promisify(stream.pipeline);
+
+/**
+ * GET /images/:key
+ * Retrieves an object from the S3 bucket by its key (filename).
+ * Streams the file content as the response.
+ * 
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object.
+ * @param {function} next - Express next middleware function.
+ */
+app.get('/images/:key', async (req, res, next) => {
+  try {
+    // Parameters for S3 GetObjectCommand
+    const getObjectParams = {
+      Bucket: BUCKET_NAME,
+      Key: req.params.key,
+    };
+    // Create the command to get the object
+    const command = new GetObjectCommand(getObjectParams);
+
+    // Send the command to S3 client
+    const data = await s3Client.send(command);
+
+    // Set content type header (default to octet-stream if unknown)
+    res.setHeader('Content-Type', data.ContentType || 'application/octet-stream');
+
+    // Stream the object data directly to the response
+    await pipeline(data.Body, res);
+  } catch (error) {
+    // Pass errors to error handling middleware
+    next(error);
+  }
+});
+
+
+/**
  * Error handling middleware.
  * @function
  * @param {Error} err - The error object.

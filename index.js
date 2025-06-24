@@ -1,5 +1,9 @@
 require('dotenv').config(); //Loads .env variables
 
+console.log("BUCKET_NAME:", process.env.BUCKET_NAME);
+console.log("AWS_REGION:", process.env.AWS_REGION);
+
+
 /**
  * @file Overview of the server setup for a Movie API.
  */
@@ -194,13 +198,9 @@ if (!fs.existsSync(UPLOAD_TEMP_PATH)) {
  */
 app.get('/images', async (req, res, next) => {
   try {
-    console.log('Listing from bucket:', BUCKET_NAME);
-
     const listObjectsParams = { Bucket: BUCKET_NAME };
     const command = new ListObjectsV2Command(listObjectsParams);
     const response = await s3Client.send(command);
-
-    console.log('Objects:', response.Contents);
 
     if (!response.Contents || response.Contents.length === 0) {
       return res.status(200).json({ message: 'Bucket is empty' });
@@ -208,11 +208,9 @@ app.get('/images', async (req, res, next) => {
 
     res.json(response.Contents.map(obj => obj.Key));
   } catch (error) {
-    console.error('S3 List Error:', error);
     next(error);
   }
 });
-
 
 /**
  * POST /images
